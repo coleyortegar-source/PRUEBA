@@ -3,317 +3,319 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Multi-Calculadora de Créditos Colombia (V2.0)</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Leasing Support | Financiamiento Corporativo en Barranquilla</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Plus Jakarta Sans (Tipografía moderna y limpia de UI) -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Inter', sans-serif;
-        }
         body {
-            background-color: #0f172a;
-            color: #f1f5f9;
-            padding: 20px;
-        }
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            background: #1e293b;
-            padding: 35px;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-            border: 1px solid #334155;
-        }
-        header {
-            text-align: center;
-            margin-bottom: 35px;
-            border-bottom: 1px solid #334155;
-            padding-bottom: 25px;
-        }
-        h1 { color: #38bdf8; font-size: 28px; margin-bottom: 8px; }
-        p.subtitle { color: #94a3b8; font-size: 14px; }
-        .badge {
-            background: #0284c7;
-            color: white;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: 600;
-            vertical-align: middle;
-            margin-left: 8px;
-        }
-        .grid {
-            display: grid;
-            grid-template-columns: 1.2fr 1fr;
-            gap: 35px;
-        }
-        @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
-        .form-group {
-            margin-bottom: 22px;
-        }
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: #94a3b8;
-            font-size: 14px;
-        }
-        input, select {
-            width: 100%;
-            padding: 12px 14px;
-            border: 1px solid #475569;
-            border-radius: 8px;
-            font-size: 15px;
-            background-color: #0f172a;
-            color: white;
-            transition: all 0.3s;
-        }
-        input:focus, select:focus {
-            outline: none;
-            border-color: #38bdf8;
-            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
-        }
-        .results-box {
-            background-color: #0f172a;
-            border-radius: 12px;
-            padding: 25px;
-            border-top: 4px solid #38bdf8;
-        }
-        .result-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 14px 0;
-            border-bottom: 1px solid #334155;
-        }
-        .result-item:last-child { border-bottom: none; }
-        .result-label { font-weight: 500; color: #94a3b8; }
-        .result-value { font-weight: 700; color: #f8fafc; font-size: 18px; }
-        .highlight { color: #34d399; font-size: 22px; }
-        .info-card {
-            background: rgba(56, 189, 248, 0.1);
-            border: 1px solid rgba(56, 189, 248, 0.2);
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 20px;
-            font-size: 13px;
-            color: #cbd5e1;
-            line-height: 1.6;
-        }
-        .tabs-container {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 25px;
-            background: #0f172a;
-            padding: 6px;
-            border-radius: 8px;
-        }
-        .tab-btn {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: #94a3b8;
-            padding: 10px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 14px;
-            transition: all 0.2s;
-        }
-        .tab-btn.active {
-            background: #38bdf8;
-            color: #0f172a;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            scroll-behavior: smooth;
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <header>
-            <h1>Simulador Multicrédito Colombiano <span class="badge">V2.0 PRO</span></h1>
-            <p class="subtitle">Simulación avanzada: Vivienda, Vehículo, Consumo y Tarjetas con tasas de usura y seguros estimados</p>
-        </header>
+<body class="bg-slate-50 text-slate-800 antialiased">
 
-        <div class="tabs-container">
-            <button class="tab-btn active" onclick="cambiarTipo('hipotecario')">🏠 Hipotecario / Leasing</button>
-            <button class="tab-btn" onclick="cambiarTipo('vehiculo')">🚗 Vehículo</button>
-            <button class="tab-btn" onclick="cambiarTipo('libre')">💰 Libre Inversión</button>
-            <button class="tab-btn" onclick="cambiarTipo('tarjeta')">💳 Tarjeta de Crédito</button>
-        </div>
-        
-        <div class="grid">
+    <!-- 1. HEADER & NAVBAR -->
+    <header class="bg-white/80 backdrop-blur-md border-b border-slate-100 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Brand Logo -->
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-gradient-to-tr from-blue-600 to-indigo-700 rounded-xl flex items-center justify-center text-white font-black text-xl shadow-md shadow-blue-600/30">
+                    LS
+                </div>
+                <span class="text-xl font-extrabold text-slate-900 tracking-tight uppercase">
+                    Leasing<span class="text-blue-600">Support</span>
+                </span>
+            </div>
+            <!-- Desktop Nav -->
+            <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600">
+                <a href="#beneficios" class="hover:text-blue-600 transition-colors">Beneficios</a>
+                <a href="#soluciones" class="hover:text-blue-600 transition-colors">Soluciones</a>
+                <a href="#simulador" class="hover:text-blue-600 transition-colors">Simulador Virtual</a>
+                <a href="#proceso" class="hover:text-blue-600 transition-colors">¿Cómo funciona?</a>
+            </nav>
+            <!-- CTA Header -->
             <div>
-                <div class="form-group">
-                    <label id="lblMonto" for="montoPrincipal">Monto Total del Crédito / Valor Inmueble ($ COP)</label>
-                    <input type="number" id="montoPrincipal" value="150000000" step="5000000">
+                <a href="#contacto" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl text-sm font-bold transition-all transform hover:-translate-y-0.5 shadow-lg shadow-blue-600/10">
+                    Estudio de Crédito
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 2. HERO SECTION (IMPACTO PREMIUM) -->
+    <section class="relative overflow-hidden py-24 lg:py-32 bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 text-white">
+        <!-- Blur Glows de fondo -->
+        <div class="absolute top-0 right-0 -mt-20 -mr-20 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute bottom-0 left-0 -mb-20 -ml-20 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-16 items-center">
+            <div class="space-y-8">
+                <span class="inline-flex items-center gap-2 py-1.5 px-4 rounded-full text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20 uppercase tracking-wider">
+                    📍 Aliado Estratégico en Barranquilla y la Región Caribe
+                </span>
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-none bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">
+                    Financia el futuro de tu PyME sin perder liquidez
+                </h1>
+                <p class="text-lg text-slate-400 max-w-xl leading-relaxed">
+                    En <strong class="text-white">LEASING SUPPORT</strong> impulsamos el sector empresarial de la Puerta de Oro. Adquiere infraestructura industrial, bodegas comerciales o maquinaria de última generación con flexibilidad fiscal total.
+                </p>
+                <div class="pt-2 flex flex-col sm:flex-row gap-4">
+                    <a href="#contacto" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-8 py-4 rounded-xl text-center transition-all transform hover:-translate-y-0.5 shadow-lg shadow-emerald-500/20">
+                        Hablar con un Asesor
+                    </a>
+                    <a href="#simulador" class="border border-slate-700 hover:border-slate-500 text-white font-semibold px-8 py-4 rounded-xl text-center transition-all">
+                        Simular Cuota Mensual
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Hero Side Graphic (UI Glassmorphism Card) -->
+            <div class="relative lg:ml-6">
+                <div class="absolute -inset-1 rounded-3xl bg-gradient-to-r from-blue-600 to-emerald-500 opacity-20 blur-xl"></div>
+                <div class="relative bg-slate-900/40 backdrop-blur-xl border border-slate-800 rounded-3xl p-8 shadow-2xl space-y-6">
+                    <div class="flex justify-between items-center border-b border-slate-800 pb-4">
+                        <span class="text-sm font-semibold text-emerald-400 flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Por qué elegirnos
+                        </span>
+                        <span class="text-xs text-slate-500">Beneficios Inmediatos</span>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="p-4 rounded-xl bg-slate-900/50 border border-slate-800/60">
+                            <h4 class="font-bold text-white text-base">Optimización del Impuesto de Renta</h4>
+                            <p class="text-xs text-slate-400 mt-1">Registra los cánones de arrendamiento como un gasto operativo deducible.</p>
+                        </div>
+                        <div class="p-4 rounded-xl bg-slate-900/50 border border-slate-800/60">
+                            <h4 class="font-bold text-white text-base">Liberación de Cupos Bancarios</h4>
+                            <p class="text-xs text-slate-400 mt-1">No afectes tu capacidad de endeudamiento en la banca comercial tradicional.</p>
+                        </div>
+                        <div class="p-4 rounded-xl bg-slate-900/50 border border-slate-800/60">
+                            <h4 class="font-bold text-white text-base">Financiación Flexible</h4>
+                            <p class="text-xs text-slate-400 mt-1">Plazos diseñados de acuerdo al retorno de inversión y flujo de caja de tu PyME.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. SECCIÓN DE SOLUCIONES (PRODUCTOS DESTACADOS) -->
+    <section id="soluciones" class="py-24 bg-slate-100/60">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-20">
+                <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight sm:text-4xl">Líneas de Leasing Especializadas</h2>
+                <p class="mt-4 text-lg text-slate-600">Infraestructura y equipamiento clave para la competitividad industrial y comercial en Barranquilla.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 lg:gap-12">
+                <!-- Tarjeta 1: Inmuebles -->
+                <div class="bg-white border border-slate-200/60 p-8 lg:p-10 rounded-3xl shadow-sm hover:shadow-xl transition-all flex flex-col justify-between group">
+                    <div>
+                        <div class="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-6 text-3xl group-hover:bg-blue-600 group-hover:text-white transition-all shadow-sm">🏢</div>
+                        <h3 class="text-2xl font-bold text-slate-900 mb-3">Leasing Inmobiliario Corporativo</h3>
+                        <p class="text-slate-600 mb-6 leading-relaxed">Adquiere o expande tus bodegas en zonas francas, locales comerciales en áreas de alto tráfico o naves logísticas esenciales para la actividad portuaria del Atlántico.</p>
+                        <ul class="space-y-3 mb-8 text-sm text-slate-600">
+                            <li class="flex items-center gap-3"><span class="w-2 h-2 rounded-full bg-blue-600"></span> Financiación a largo plazo de hasta 120 meses.</li>
+                            <li class="flex items-center gap-3"><span class="w-2 h-2 rounded-full bg-blue-600"></span> Financiamos hasta el 90% del valor del activo.</li>
+                            <li class="flex items-center gap-3"><span class="w-2 h-2 rounded-full bg-blue-600"></span> Aplica para proyectos sobre planos o construidos.</li>
+                        </ul>
+                    </div>
+                    <a href="#contacto" class="bg-slate-50 border border-slate-200 text-slate-900 text-center font-bold py-4 rounded-xl group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600 transition-all">
+                        Cotizar Infraestructura
+                    </a>
+                </div>
+
+                <!-- Tarjeta 2: Maquinaria -->
+                <div class="bg-white border border-slate-200/60 p-8 lg:p-10 rounded-3xl shadow-sm hover:shadow-xl transition-all flex flex-col justify-between group">
+                    <div>
+                        <div class="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mb-6 text-3xl group-hover:bg-emerald-500 group-hover:text-white transition-all shadow-sm">⚙️</div>
+                        <h3 class="text-2xl font-bold text-slate-900 mb-3">Leasing de Maquinaria y Equipo</h3>
+                        <p class="text-slate-600 mb-6 leading-relaxed">Moderniza tus líneas de producción industrial, maquinaria pesada para construcción, flotas logísticas de transporte o infraestructura tecnológica de vanguardia.</p>
+                        <ul class="space-y-3 mb-8 text-sm text-slate-600">
+                            <li class="flex items-center gap-3"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> Evita la obsolescencia: renueva equipos de forma periódica.</li>
+                            <li class="flex items-center gap-3"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> Cobertura para equipos importados o de fabricación local.</li>
+                            <li class="flex items-center gap-3"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> Cánones adaptados a la productividad del activo.</li>
+                        </ul>
+                    </div>
+                    <a href="#contacto" class="bg-slate-50 border border-slate-200 text-slate-900 text-center font-bold py-4 rounded-xl group-hover:bg-emerald-500 group-hover:text-white group-hover:border-emerald-500 transition-all">
+                        Cotizar Maquinaria
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. INTERACTIVE SIMULATOR SECTION (BAJA FRICCIÓN DE CONVERSIÓN) -->
+    <section id="simulador" class="py-24 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-white border border-slate-200 rounded-3xl p-8 lg:p-12 shadow-xl grid md:grid-cols-5 gap-12 items-center">
+            <div class="md:col-span-3 space-y-6">
+                <div>
+                    <span class="text-xs font-bold text-blue-600 uppercase tracking-widest block">Simulación en Línea</span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">Calcula tu estructura financiera</h2>
                 </div>
                 
-                <div class="form-group" id="divCuotaInicial">
-                    <label for="cuotaInicial">Cuota Inicial ($ COP)</label>
-                    <input type="number" id="cuotaInicial" value="45000000" step="5000000">
+                <!-- Rango de Monto -->
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center text-sm font-semibold text-slate-700">
+                        <label for="monto">Monto estimado del activo:</label>
+                        <span class="text-blue-600 text-lg font-bold" id="montoLabel">$150,000,000 COP</span>
+                    </div>
+                    <input type="range" id="monto" min="50000000" max="3000000000" step="50000000" value="300000000" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600">
+                    <div class="flex justify-between text-xs text-slate-400">
+                        <span>$50M COP</span>
+                        <span>$3,000M COP</span>
+                    </div>
                 </div>
 
-                <div class="form-group" id="divAmortizacion">
-                    <label for="tipoSistema">Modalidad de Moneda</label>
-                    <select id="tipoSistema">
-                        <option value="pesos">Pesos Colombianos (Cuota Fija)</option>
-                        <option value="uvr">UVR (Indexado a Inflación / IPC)</option>
+                <!-- Selección de Plazo -->
+                <div class="space-y-2">
+                    <span class="text-sm font-semibold text-slate-700 block">Plazo en meses:</span>
+                    <div class="grid grid-cols-3 gap-3">
+                        <label class="border border-slate-200 rounded-xl p-3 text-center cursor-pointer hover:border-blue-500 transition-all block">
+                            <input type="radio" name="plazo" value="36" class="sr-only">
+                            <span class="block text-sm font-bold text-slate-800">36 Meses</span>
+                        </label>
+                        <label class="border-2 border-blue-600 bg-blue-50/30 rounded-xl p-3 text-center cursor-pointer transition-all block">
+                            <input type="radio" name="plazo" value="60" checked class="sr-only">
+                            <span class="block text-sm font-bold text-slate-800">60 Meses</span>
+                        </label>
+                        <label class="border border-slate-200 rounded-xl p-3 text-center cursor-pointer hover:border-blue-500 transition-all block">
+                            <input type="radio" name="plazo" value="120" class="sr-only">
+                            <span class="block text-sm font-bold text-slate-800">120 Meses</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Caja de Resultados -->
+            <div class="md:col-span-2 bg-slate-950 text-white p-8 rounded-2xl text-center space-y-6 border border-slate-800">
+                <div>
+                    <span class="text-xs text-slate-400 font-medium block uppercase tracking-wider">Canon Mensual Estimado</span>
+                    <span class="text-3xl font-black text-emerald-400 mt-2 block" id="cuotaEstimada">$6,800,000 COP</span>
+                </div>
+                <p class="text-xs text-slate-400 leading-relaxed">Cálculo de referencia con tasas promedio de mercado. Sujeto a estudio de riesgo y viabilidad de la PyME.</p>
+                <a href="#contacto" class="block w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl transition-all text-sm shadow-md shadow-blue-600/10">
+                    Solicitar Oferta Formal
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. CAPTURA DE LEADS CON ALTA INTERVERSIÓN -->
+    <section id="contacto" class="bg-slate-950 py-24 text-white relative">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Radica tu Solicitud de Prefactibilidad</h2>
+                <p class="mt-4 text-slate-400 max-w-xl mx-auto text-sm sm:text-base">Sin papeleo inicial complejo. Cuéntanos qué necesita tu empresa y un especialista en estructuración financiera corporativa te contactará.</p>
+            </div>
+
+            <form class="bg-slate-900 border border-slate-800 p-8 sm:p-10 rounded-3xl shadow-2xl grid md:grid-cols-2 gap-6" onsubmit="event.preventDefault(); alert('¡Solicitud registrada con éxito en LEASING SUPPORT! Un analista corporativo en Barranquilla se comunicará con usted en menos de 24 horas.');">
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Nombre Completo del Contacto</label>
+                    <input type="text" required placeholder="Ej. Andrés Palomino" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-700 focus:outline-none focus:border-blue-500 transition-colors text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Razón Social de la PyME (NIT)</label>
+                    <input type="text" required placeholder="Ej. Distribuciones del Caribe S.A.S." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-700 focus:outline-none focus:border-blue-500 transition-colors text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Correo Electrónico Corporativo</label>
+                    <input type="email" required placeholder="andres@empresa.com" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-700 focus:outline-none focus:border-blue-500 transition-colors text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Celular de Contacto Corporativo</label>
+                    <input type="tel" required placeholder="Ej. 300 123 4567" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-700 focus:outline-none focus:border-blue-500 transition-colors text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Activo a Financiar</label>
+                    <select class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors text-sm appearance-none cursor-pointer">
+                        <option>Leasing Inmobiliario (Bodegas, Oficinas, Locales)</option>
+                        <option>Leasing de Maquinaria Industrial / Equipos</option>
+                        <option>Vehículos de Carga / Flotas Logísticas</option>
                     </select>
                 </div>
-
-                <div class="form-group">
-                    <label for="tasaAnual">Tasa de Interés Nominal/Efectiva Propuesta (E.A. %)</label>
-                    <input type="number" id="tasaAnual" value="11.8" step="0.05">
-                </div>
-
-                <div class="form-group">
-                    <label id="lblPlazo" for="plazo">Plazo de Amortización (Meses)</label>
-                    <input type="number" id="plazo" value="180" min="1" max="360">
-                </div>
-
-                <div class="form-group">
-                    <label for="seguroMes">Seguro de Vida Obligatorio + Todo Riesgo Estimado (Mensual $ COP)</label>
-                    <input type="number" id="seguroMes" value="45000" step="5000">
-                </div>
-            </div>
-            
-            <div>
-                <h2 style="font-size: 18px; margin-bottom: 15px; color: #38bdf8;">Análisis Financiero del Escenario</h2>
-                <div class="results-box">
-                    <div class="result-item">
-                        <span class="result-label">Capital Neto a Financiar</span>
-                        <span class="result-value" id="resFinanciar">$ 0</span>
-                    </div>
-                    <div class="result-item">
-                        <span class="result-label">Tasa Periódica Mes Vencido (M.V.)</span>
-                        <span class="result-value" id="resTasaMes">0.00%</span>
-                    </div>
-                    <div class="result-item">
-                        <span class="result-label">Cuota Base (Solo Capital + Interés)</span>
-                        <span class="result-value" id="resCuotaBase">$ 0</span>
-                    </div>
-                    <div class="result-item">
-                        <span class="result-label">Seguros Mensuales Adicionados</span>
-                        <span class="result-value" id="resSeguro">$ 0</span>
-                    </div>
-                    <div class="result-item" style="background: rgba(52, 211, 153, 0.05); padding: 10px; border-radius: 6px;">
-                        <span class="result-label" style="color: #34d399; font-weight: 600;">CUOTA MENSUAL TOTAL</span>
-                        <span class="result-value highlight" id="resCuotaTotal">$ 0</span>
-                    </div>
-                    <div class="result-item">
-                        <span class="result-label">Costo Total de Intereses Generados</span>
-                        <span class="result-value" id="resIntereses">$ 0</span>
-                    </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Valor Estimado del Proyecto</label>
+                    <input type="text" placeholder="Ej. $450,000,000 COP" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-700 focus:outline-none focus:border-blue-500 transition-colors text-sm">
                 </div>
                 
-                <div class="info-card" id="infoDinamica">
-                    <strong>Análisis del Sistema:</strong> Los créditos hipotecarios en Colombia permiten plazos amplios y tasas competitivas. Recuerde validar si aplica a subsidios del gobierno (Mi Casa Ya / Cobertura FRECH).
+                <div class="md:col-span-2 pt-4">
+                    <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-4 rounded-xl transition-all transform hover:-translate-y-0.5 shadow-lg shadow-emerald-500/20 text-center">
+                        Iniciar Estudio de Prefactibilidad Gratuitó
+                    </button>
+                    <p class="text-center text-xs text-slate-500 mt-4">
+                        Al enviar, autoriza el tratamiento seguro de datos exclusivamente para fines comerciales de estructuración de crédito corporativo.
+                    </p>
                 </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- 6. FOOTER -->
+    <footer class="bg-slate-950 text-slate-600 text-xs py-12 border-t border-slate-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">LS</div>
+                <span class="text-slate-400 font-bold tracking-tight uppercase">Leasing Support © 2026</span>
+            </div>
+            <div class="flex gap-6 text-slate-500 font-medium">
+                <a href="#" class="hover:text-slate-300 transition-colors">Términos Legales</a>
+                <a href="#" class="hover:text-slate-300 transition-colors">Tratamiento de Datos (Habeas Data)</a>
+                <a href="#" class="hover:text-slate-300 transition-colors">Vigilado Superintendencia</a>
             </div>
         </div>
-    </div>
+    </footer>
 
+    <!-- INTERACTIVE SCRIPT PARA EL SIMULADOR DE COUTAS (LÓGICA JAVASCRIPT) -->
     <script>
-        let tipoCreditoActivo = 'hipotecario';
+        const montoInput = document.getElementById('monto');
+        const montoLabel = document.getElementById('montoLabel');
+        const cuotaEstimada = document.getElementById('cuotaEstimada');
+        const radioInputs = document.querySelectorAll('input[name="plazo"]');
 
-        function cambiarTipo(tipo) {
-            tipoCreditoActivo = tipo;
+        function calcularLeasing() {
+            const monto = parseInt(montoInput.value);
+            let plazo = 60;
             
-            // Actualizar botones de pestañas
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+            radioInputs.forEach(input => {
+                if(input.checked) {
+                    plazo = parseInt(input.value);
+                }
+            });
 
-            // Modificar visibilidad y valores sugeridos según la modalidad colombiana estándar
-            const divCuotaInicial = document.getElementById('divCuotaInicial');
-            const divAmortizacion = document.getElementById('divAmortizacion');
-            const lblMonto = document.getElementById('lblMonto');
-            const lblPlazo = document.getElementById('lblPlazo');
-            
-            if (tipo === 'hipotecario') {
-                lblMonto.textContent = "Valor del Inmueble ($ COP)";
-                lblPlazo.textContent = "Plazo de Amortización (Meses)";
-                divCuotaInicial.style.display = 'block';
-                divAmortizacion.style.display = 'block';
-                document.getElementById('montoPrincipal').value = "150000000";
-                document.getElementById('cuotaInicial').value = "45000000";
-                document.getElementById('tasaAnual').value = "11.5";
-                document.getElementById('plazo').value = "240";
-                document.getElementById('seguroMes').value = "55000";
-                document.getElementById('infoDinamica').innerHTML = "<strong>Análisis del Sistema:</strong> Financiamiento máx del 70% para vivienda NO VIS y 80% para VIS. Estabilidad a largo plazo mediante cuotas fijas en pesos.";
-            } else if (tipo === 'vehiculo') {
-                lblMonto.textContent = "Monto a Financiar el Vehículo ($ COP)";
-                lblPlazo.textContent = "Plazo de Amortización (Meses)";
-                divCuotaInicial.style.display = 'none';
-                divAmortizacion.style.display = 'none';
-                document.getElementById('montoPrincipal').value = "60000000";
-                document.getElementById('tasaAnual').value = "15.5";
-                document.getElementById('plazo').value = "72";
-                document.getElementById('seguroMes').value = "80000"; // Incluye póliza auto todo riesgo endosada
-                document.getElementById('infoDinamica').innerHTML = "<strong>Análisis del Sistema:</strong> El crédito de vehículo suele exigir pignoración del automotor. Las tasas varían si el carro es nuevo o usado.";
-            } else if (tipo === 'libre') {
-                lblMonto.textContent = "Monto del Crédito de Consumo ($ COP)";
-                lblPlazo.textContent = "Plazo Solicitado (Meses)";
-                divCuotaInicial.style.display = 'none';
-                divAmortizacion.style.display = 'none';
-                document.getElementById('montoPrincipal').value = "20000000";
-                document.getElementById('tasaAnual').value = "22.0";
-                document.getElementById('plazo').value = "48";
-                document.getElementById('seguroMes').value = "15000";
-                document.getElementById('infoDinamica').innerHTML = "<strong>Análisis del Sistema:</strong> Libre inversión/Consumo. Tasas más elevadas sujetas al perfil de riesgo. Alerta con la tasa de usura fijada por la Superfinanciera.";
-            } else if (tipo === 'tarjeta') {
-                lblMonto.textContent = "Cupo Utilizado / Avance / Compra ($ COP)";
-                lblPlazo.textContent = "Diferido a Cuotas (Meses)";
-                divCuotaInicial.style.display = 'none';
-                divAmortizacion.style.display = 'none';
-                document.getElementById('montoPrincipal').value = "5000000";
-                document.getElementById('tasaAnual').value = "28.5"; // Cercano a la usura habitual de tarjetas
-                document.getElementById('plazo').value = "24";
-                document.getElementById('seguroMes').value = "6000"; // Seguro de cartera común
-                document.getElementById('infoDinamica').innerHTML = "<strong>Análisis del Sistema:</strong> Compras diferidas a 1 sola cuota por lo general no generan intereses corrientes en Colombia. Evite los avances en efectivo debido a su alto costo inmediato.";
-            }
-            
-            calcularTodo();
+            // Actualizar etiqueta del monto formateada a pesos colombianos (COP)
+            montoLabel.textContent = `$${monto.toLocaleString('es-CO')} COP`;
+
+            // Algoritmo de aproximación comercial para leasing corporativo
+            let tasaInteresMensualFactor = 0.015; // Plazo 36 meses
+            if (plazo === 60) tasaInteresMensualFactor = 0.012;
+            if (plazo === 120) tasaInteresMensualFactor = 0.009;
+
+            const cuotaCalculada = Math.round((monto / plazo) + (monto * tasaInteresMensualFactor));
+            cuotaEstimada.textContent = `$${cuotaCalculada.toLocaleString('es-CO')} COP`;
         }
 
-        function calcularTodo() {
-            const montoPrincipal = parseFloat(document.getElementById('montoPrincipal').value) || 0;
-            const cuotaInicial = tipoCreditoActivo === 'hipotecario' ? (parseFloat(document.getElementById('cuotaInicial').value) || 0) : 0;
-            const tasaAnual = parseFloat(document.getElementById('tasaAnual').value) || 0;
-            const plazo = parseInt(document.getElementById('plazo').value) || 0;
-            const seguroMes = parseFloat(document.getElementById('seguroMes').value) || 0;
-
-            const capitalFinanciar = montoPrincipal - cuotaInicial;
-            document.getElementById('resFinanciar').textContent = '$ ' + capitalFinanciar.toLocaleString('es-CO');
-
-            if (capitalFinanciar <= 0 || plazo <= 0 || tasaAnual <= 0) {
-                document.getElementById('resCuotaBase').textContent = "$ 0";
-                document.getElementById('resCuotaTotal').textContent = "$ 0";
-                document.getElementById('resIntereses').textContent = "$ 0";
-                return;
-            }
-
-            // Convertir de Efectiva Anual (E.A) a Mensual Vencida (M.V)
-            const tasaMensual = Math.pow(1 + (tasaAnual / 100), 1 / 12) - 1;
-            document.getElementById('resTasaMes').textContent = (tasaMensual * 100).toFixed(2) + '%';
-
-            // Cálculo de la cuota base usando amortización constante (sistema francés)
-            const cuotaBase = (capitalFinanciar * tasaMensual) / (1 - Math.pow(1 + tasaMensual, -plazo));
-            const cuotaTotal = cuotaBase + seguroMes;
-            const totalIntereses = (cuotaBase * plazo) - capitalFinanciar;
-
-            document.getElementById('resCuotaBase').textContent = '$ ' + Math.round(cuotaBase).toLocaleString('es-CO');
-            document.getElementById('resSeguro').textContent = '$ ' + Math.round(seguroMes).toLocaleString('es-CO');
-            document.getElementById('resCuotaTotal').textContent = '$ ' + Math.round(cuotaTotal).toLocaleString('es-CO');
-            document.getElementById('resIntereses').textContent = '$ ' + Math.round(totalIntereses).toLocaleString('es-CO');
-        }
-
-        // Listener para recálculo dinámico en cualquier interacción
-        document.querySelectorAll('input, select').forEach(element => {
-            element.addEventListener('input', calcularTodo);
+        // Listeners de los controles
+        montoInput.addEventListener('input', calcularLeasing);
+        radioInputs.forEach(input => {
+            input.addEventListener('change', () => {
+                // Alternar clases visuales activas/inactivas en base al UX radio customizado
+                radioInputs.forEach(ri => {
+                    const parentLabel = ri.closest('label');
+                    if (ri.checked) {
+                        parentLabel.className = "border-2 border-blue-600 bg-blue-50/30 rounded-xl p-3 text-center cursor-pointer transition-all block";
+                    } else {
+                        parentLabel.className = "border border-slate-200 rounded-xl p-3 text-center cursor-pointer hover:border-blue-500 transition-all block";
+                    }
+                });
+                calcularLeasing();
+            });
         });
 
-        // Inicialización en la carga original
-        calcularTodo();
+        // Inicialización en la primera carga
+        calcularLeasing();
     </script>
 </body>
 </html>
