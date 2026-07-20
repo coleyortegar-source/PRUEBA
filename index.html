@@ -1,321 +1,270 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leasing Support | Financiamiento Corporativo en Barranquilla</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Plus Jakarta Sans (Tipografía moderna y limpia de UI) -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            scroll-behavior: smooth;
-        }
-    </style>
-</head>
-<body class="bg-slate-50 text-slate-800 antialiased">
+/**
+ * DataPulse Suite Pro — Backend Apps Script
+ * Compatible con el frontend "Recrear (1).html" (DataPulse Suite Pro)
+ * Sumerce Alimentos S.A.S.
+ *
+ * ACCIONES SOPORTADAS (deben coincidir EXACTO con las que llama el HTML):
+ *   login, obtenerDatosDashboard, guardarOrganizacion, crearProducto,
+ *   crearVendedor, registrarVenta, guardarObjetivo, guardarConfig,
+ *   actualizarAvanceOKR
+ *
+ * INSTALACIÓN:
+ * 1. Abre tu Google Sheet (el mismo que ya tenías, o uno nuevo).
+ * 2. Extensiones > Apps Script.
+ * 3. Borra TODO el contenido de Code.gs y pega este archivo completo.
+ * 4. Guarda.
+ * 5. Implementar > Gestionar implementaciones > edita (lápiz) la
+ *    implementación existente > "Nueva versión" > Implementar.
+ *    (Si prefieres una URL nueva: Implementar > Nueva implementación
+ *    > Aplicación web > Ejecutar como "Yo" > Acceso "Cualquier usuario").
+ * 6. Copia la URL /exec y pégala en el campo "URL Google Apps Script"
+ *    del formulario de login de Recrear.html.
+ */
 
-    <!-- 1. HEADER & NAVBAR -->
-    <header class="bg-white/80 backdrop-blur-md border-b border-slate-100 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <!-- Brand Logo -->
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-gradient-to-tr from-blue-600 to-indigo-700 rounded-xl flex items-center justify-center text-white font-black text-xl shadow-md shadow-blue-600/30">
-                    LS
-                </div>
-                <span class="text-xl font-extrabold text-slate-900 tracking-tight uppercase">
-                    Leasing<span class="text-blue-600">Support</span>
-                </span>
-            </div>
-            <!-- Desktop Nav -->
-            <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600">
-                <a href="#beneficios" class="hover:text-blue-600 transition-colors">Beneficios</a>
-                <a href="#soluciones" class="hover:text-blue-600 transition-colors">Soluciones</a>
-                <a href="#simulador" class="hover:text-blue-600 transition-colors">Simulador Virtual</a>
-                <a href="#proceso" class="hover:text-blue-600 transition-colors">¿Cómo funciona?</a>
-            </nav>
-            <!-- CTA Header -->
-            <div>
-                <a href="#contacto" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl text-sm font-bold transition-all transform hover:-translate-y-0.5 shadow-lg shadow-blue-600/10">
-                    Estudio de Crédito
-                </a>
-            </div>
-        </div>
-    </header>
+const SHEETS = {
+  USUARIOS: 'Usuarios',
+  ORGANIZACION: 'Organizacion',
+  CONFIG: 'Config',
+  PRODUCTOS: 'Productos',
+  VENDEDORES: 'Vendedores',
+  VENTAS: 'Ventas',
+  OBJETIVOS: 'Objetivos'
+};
 
-    <!-- 2. HERO SECTION (IMPACTO PREMIUM) -->
-    <section class="relative overflow-hidden py-24 lg:py-32 bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 text-white">
-        <!-- Blur Glows de fondo -->
-        <div class="absolute top-0 right-0 -mt-20 -mr-20 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
-        <div class="absolute bottom-0 left-0 -mb-20 -ml-20 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+/* ============================================================
+   ENTRY POINTS
+   ============================================================ */
 
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-16 items-center">
-            <div class="space-y-8">
-                <span class="inline-flex items-center gap-2 py-1.5 px-4 rounded-full text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20 uppercase tracking-wider">
-                    📍 Aliado Estratégico en Barranquilla y la Región Caribe
-                </span>
-                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-none bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">
-                    Financia el futuro de tu PyME sin perder liquidez
-                </h1>
-                <p class="text-lg text-slate-400 max-w-xl leading-relaxed">
-                    En <strong class="text-white">LEASING SUPPORT</strong> impulsamos el sector empresarial de la Puerta de Oro. Adquiere infraestructura industrial, bodegas comerciales o maquinaria de última generación con flexibilidad fiscal total.
-                </p>
-                <div class="pt-2 flex flex-col sm:flex-row gap-4">
-                    <a href="#contacto" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-8 py-4 rounded-xl text-center transition-all transform hover:-translate-y-0.5 shadow-lg shadow-emerald-500/20">
-                        Hablar con un Asesor
-                    </a>
-                    <a href="#simulador" class="border border-slate-700 hover:border-slate-500 text-white font-semibold px-8 py-4 rounded-xl text-center transition-all">
-                        Simular Cuota Mensual
-                    </a>
-                </div>
-            </div>
-            
-            <!-- Hero Side Graphic (UI Glassmorphism Card) -->
-            <div class="relative lg:ml-6">
-                <div class="absolute -inset-1 rounded-3xl bg-gradient-to-r from-blue-600 to-emerald-500 opacity-20 blur-xl"></div>
-                <div class="relative bg-slate-900/40 backdrop-blur-xl border border-slate-800 rounded-3xl p-8 shadow-2xl space-y-6">
-                    <div class="flex justify-between items-center border-b border-slate-800 pb-4">
-                        <span class="text-sm font-semibold text-emerald-400 flex items-center gap-2">
-                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Por qué elegirnos
-                        </span>
-                        <span class="text-xs text-slate-500">Beneficios Inmediatos</span>
-                    </div>
-                    <div class="space-y-4">
-                        <div class="p-4 rounded-xl bg-slate-900/50 border border-slate-800/60">
-                            <h4 class="font-bold text-white text-base">Optimización del Impuesto de Renta</h4>
-                            <p class="text-xs text-slate-400 mt-1">Registra los cánones de arrendamiento como un gasto operativo deducible.</p>
-                        </div>
-                        <div class="p-4 rounded-xl bg-slate-900/50 border border-slate-800/60">
-                            <h4 class="font-bold text-white text-base">Liberación de Cupos Bancarios</h4>
-                            <p class="text-xs text-slate-400 mt-1">No afectes tu capacidad de endeudamiento en la banca comercial tradicional.</p>
-                        </div>
-                        <div class="p-4 rounded-xl bg-slate-900/50 border border-slate-800/60">
-                            <h4 class="font-bold text-white text-base">Financiación Flexible</h4>
-                            <p class="text-xs text-slate-400 mt-1">Plazos diseñados de acuerdo al retorno de inversión y flujo de caja de tu PyME.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+function doGet(e) {
+  return jsonOut({ success: true, data: { status: 'DataPulse Suite Pro backend activo' } });
+}
 
-    <!-- 3. SECCIÓN DE SOLUCIONES (PRODUCTOS DESTACADOS) -->
-    <section id="soluciones" class="py-24 bg-slate-100/60">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto mb-20">
-                <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight sm:text-4xl">Líneas de Leasing Especializadas</h2>
-                <p class="mt-4 text-lg text-slate-600">Infraestructura y equipamiento clave para la competitividad industrial y comercial en Barranquilla.</p>
-            </div>
+function doPost(e) {
+  try {
+    const body = JSON.parse(e.postData.contents);
+    const action = body.action;
 
-            <div class="grid md:grid-cols-2 gap-8 lg:gap-12">
-                <!-- Tarjeta 1: Inmuebles -->
-                <div class="bg-white border border-slate-200/60 p-8 lg:p-10 rounded-3xl shadow-sm hover:shadow-xl transition-all flex flex-col justify-between group">
-                    <div>
-                        <div class="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-6 text-3xl group-hover:bg-blue-600 group-hover:text-white transition-all shadow-sm">🏢</div>
-                        <h3 class="text-2xl font-bold text-slate-900 mb-3">Leasing Inmobiliario Corporativo</h3>
-                        <p class="text-slate-600 mb-6 leading-relaxed">Adquiere o expande tus bodegas en zonas francas, locales comerciales en áreas de alto tráfico o naves logísticas esenciales para la actividad portuaria del Atlántico.</p>
-                        <ul class="space-y-3 mb-8 text-sm text-slate-600">
-                            <li class="flex items-center gap-3"><span class="w-2 h-2 rounded-full bg-blue-600"></span> Financiación a largo plazo de hasta 120 meses.</li>
-                            <li class="flex items-center gap-3"><span class="w-2 h-2 rounded-full bg-blue-600"></span> Financiamos hasta el 90% del valor del activo.</li>
-                            <li class="flex items-center gap-3"><span class="w-2 h-2 rounded-full bg-blue-600"></span> Aplica para proyectos sobre planos o construidos.</li>
-                        </ul>
-                    </div>
-                    <a href="#contacto" class="bg-slate-50 border border-slate-200 text-slate-900 text-center font-bold py-4 rounded-xl group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600 transition-all">
-                        Cotizar Infraestructura
-                    </a>
-                </div>
+    switch (action) {
+      case 'login':
+        return jsonOut({ success: true, data: handleLogin(body) });
+      case 'obtenerDatosDashboard':
+        return jsonOut({ success: true, data: handleObtenerDashboard(body) });
+      case 'guardarOrganizacion':
+        return jsonOut({ success: true, data: handleGuardarOrganizacion(body) });
+      case 'crearProducto':
+        return jsonOut({ success: true, data: handleCrearProducto(body) });
+      case 'crearVendedor':
+        return jsonOut({ success: true, data: handleCrearVendedor(body) });
+      case 'registrarVenta':
+        return jsonOut({ success: true, data: handleRegistrarVenta(body) });
+      case 'guardarObjetivo':
+        return jsonOut({ success: true, data: handleGuardarObjetivo(body) });
+      case 'guardarConfig':
+        return jsonOut({ success: true, data: handleGuardarConfig(body) });
+      case 'actualizarAvanceOKR':
+        return jsonOut({ success: true, data: handleActualizarAvanceOKR(body) });
+      default:
+        return jsonOut({ success: false, error: 'Acción no reconocida: ' + action });
+    }
+  } catch (err) {
+    return jsonOut({ success: false, error: err.message });
+  }
+}
 
-                <!-- Tarjeta 2: Maquinaria -->
-                <div class="bg-white border border-slate-200/60 p-8 lg:p-10 rounded-3xl shadow-sm hover:shadow-xl transition-all flex flex-col justify-between group">
-                    <div>
-                        <div class="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mb-6 text-3xl group-hover:bg-emerald-500 group-hover:text-white transition-all shadow-sm">⚙️</div>
-                        <h3 class="text-2xl font-bold text-slate-900 mb-3">Leasing de Maquinaria y Equipo</h3>
-                        <p class="text-slate-600 mb-6 leading-relaxed">Moderniza tus líneas de producción industrial, maquinaria pesada para construcción, flotas logísticas de transporte o infraestructura tecnológica de vanguardia.</p>
-                        <ul class="space-y-3 mb-8 text-sm text-slate-600">
-                            <li class="flex items-center gap-3"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> Evita la obsolescencia: renueva equipos de forma periódica.</li>
-                            <li class="flex items-center gap-3"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> Cobertura para equipos importados o de fabricación local.</li>
-                            <li class="flex items-center gap-3"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> Cánones adaptados a la productividad del activo.</li>
-                        </ul>
-                    </div>
-                    <a href="#contacto" class="bg-slate-50 border border-slate-200 text-slate-900 text-center font-bold py-4 rounded-xl group-hover:bg-emerald-500 group-hover:text-white group-hover:border-emerald-500 transition-all">
-                        Cotizar Maquinaria
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
+function jsonOut(obj) {
+  return ContentService.createTextOutput(JSON.stringify(obj))
+    .setMimeType(ContentService.MimeType.JSON);
+}
 
-    <!-- 4. INTERACTIVE SIMULATOR SECTION (BAJA FRICCIÓN DE CONVERSIÓN) -->
-    <section id="simulador" class="py-24 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="bg-white border border-slate-200 rounded-3xl p-8 lg:p-12 shadow-xl grid md:grid-cols-5 gap-12 items-center">
-            <div class="md:col-span-3 space-y-6">
-                <div>
-                    <span class="text-xs font-bold text-blue-600 uppercase tracking-widest block">Simulación en Línea</span>
-                    <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">Calcula tu estructura financiera</h2>
-                </div>
-                
-                <!-- Rango de Monto -->
-                <div class="space-y-2">
-                    <div class="flex justify-between items-center text-sm font-semibold text-slate-700">
-                        <label for="monto">Monto estimado del activo:</label>
-                        <span class="text-blue-600 text-lg font-bold" id="montoLabel">$150,000,000 COP</span>
-                    </div>
-                    <input type="range" id="monto" min="50000000" max="3000000000" step="50000000" value="300000000" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600">
-                    <div class="flex justify-between text-xs text-slate-400">
-                        <span>$50M COP</span>
-                        <span>$3,000M COP</span>
-                    </div>
-                </div>
+/* ============================================================
+   HELPERS DE HOJAS
+   ============================================================ */
 
-                <!-- Selección de Plazo -->
-                <div class="space-y-2">
-                    <span class="text-sm font-semibold text-slate-700 block">Plazo en meses:</span>
-                    <div class="grid grid-cols-3 gap-3">
-                        <label class="border border-slate-200 rounded-xl p-3 text-center cursor-pointer hover:border-blue-500 transition-all block">
-                            <input type="radio" name="plazo" value="36" class="sr-only">
-                            <span class="block text-sm font-bold text-slate-800">36 Meses</span>
-                        </label>
-                        <label class="border-2 border-blue-600 bg-blue-50/30 rounded-xl p-3 text-center cursor-pointer transition-all block">
-                            <input type="radio" name="plazo" value="60" checked class="sr-only">
-                            <span class="block text-sm font-bold text-slate-800">60 Meses</span>
-                        </label>
-                        <label class="border border-slate-200 rounded-xl p-3 text-center cursor-pointer hover:border-blue-500 transition-all block">
-                            <input type="radio" name="plazo" value="120" class="sr-only">
-                            <span class="block text-sm font-bold text-slate-800">120 Meses</span>
-                        </label>
-                    </div>
-                </div>
-            </div>
+function getSS() { return SpreadsheetApp.getActiveSpreadsheet(); }
 
-            <!-- Caja de Resultados -->
-            <div class="md:col-span-2 bg-slate-950 text-white p-8 rounded-2xl text-center space-y-6 border border-slate-800">
-                <div>
-                    <span class="text-xs text-slate-400 font-medium block uppercase tracking-wider">Canon Mensual Estimado</span>
-                    <span class="text-3xl font-black text-emerald-400 mt-2 block" id="cuotaEstimada">$6,800,000 COP</span>
-                </div>
-                <p class="text-xs text-slate-400 leading-relaxed">Cálculo de referencia con tasas promedio de mercado. Sujeto a estudio de riesgo y viabilidad de la PyME.</p>
-                <a href="#contacto" class="block w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl transition-all text-sm shadow-md shadow-blue-600/10">
-                    Solicitar Oferta Formal
-                </a>
-            </div>
-        </div>
-    </section>
+function getOrCreateSheet(name, headers) {
+  const ss = getSS();
+  let sheet = ss.getSheetByName(name);
+  if (!sheet) {
+    sheet = ss.insertSheet(name);
+    sheet.appendRow(headers);
+    sheet.setFrozenRows(1);
+  }
+  return sheet;
+}
 
-    <!-- 5. CAPTURA DE LEADS CON ALTA INTERVERSIÓN -->
-    <section id="contacto" class="bg-slate-950 py-24 text-white relative">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Radica tu Solicitud de Prefactibilidad</h2>
-                <p class="mt-4 text-slate-400 max-w-xl mx-auto text-sm sm:text-base">Sin papeleo inicial complejo. Cuéntanos qué necesita tu empresa y un especialista en estructuración financiera corporativa te contactará.</p>
-            </div>
+function sheetToObjects(sheet) {
+  const values = sheet.getDataRange().getValues();
+  if (values.length < 2) return [];
+  const headers = values[0];
+  return values.slice(1).map(row => {
+    const obj = {};
+    headers.forEach((h, i) => obj[h] = row[i]);
+    return obj;
+  });
+}
 
-            <form class="bg-slate-900 border border-slate-800 p-8 sm:p-10 rounded-3xl shadow-2xl grid md:grid-cols-2 gap-6" onsubmit="event.preventDefault(); alert('¡Solicitud registrada con éxito en LEASING SUPPORT! Un analista corporativo en Barranquilla se comunicará con usted en menos de 24 horas.');">
-                <div>
-                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Nombre Completo del Contacto</label>
-                    <input type="text" required placeholder="Ej. Andrés Palomino" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-700 focus:outline-none focus:border-blue-500 transition-colors text-sm">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Razón Social de la PyME (NIT)</label>
-                    <input type="text" required placeholder="Ej. Distribuciones del Caribe S.A.S." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-700 focus:outline-none focus:border-blue-500 transition-colors text-sm">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Correo Electrónico Corporativo</label>
-                    <input type="email" required placeholder="andres@empresa.com" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-700 focus:outline-none focus:border-blue-500 transition-colors text-sm">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Celular de Contacto Corporativo</label>
-                    <input type="tel" required placeholder="Ej. 300 123 4567" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-700 focus:outline-none focus:border-blue-500 transition-colors text-sm">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Activo a Financiar</label>
-                    <select class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors text-sm appearance-none cursor-pointer">
-                        <option>Leasing Inmobiliario (Bodegas, Oficinas, Locales)</option>
-                        <option>Leasing de Maquinaria Industrial / Equipos</option>
-                        <option>Vehículos de Carga / Flotas Logísticas</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Valor Estimado del Proyecto</label>
-                    <input type="text" placeholder="Ej. $450,000,000 COP" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-700 focus:outline-none focus:border-blue-500 transition-colors text-sm">
-                </div>
-                
-                <div class="md:col-span-2 pt-4">
-                    <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-4 rounded-xl transition-all transform hover:-translate-y-0.5 shadow-lg shadow-emerald-500/20 text-center">
-                        Iniciar Estudio de Prefactibilidad Gratuitó
-                    </button>
-                    <p class="text-center text-xs text-slate-500 mt-4">
-                        Al enviar, autoriza el tratamiento seguro de datos exclusivamente para fines comerciales de estructuración de crédito corporativo.
-                    </p>
-                </div>
-            </form>
-        </div>
-    </section>
+function getConfigValue(key) {
+  const sheet = getOrCreateSheet(SHEETS.CONFIG, ['key', 'value']);
+  const rows = sheetToObjects(sheet);
+  const row = rows.find(r => r.key === key);
+  return row ? row.value : '';
+}
 
-    <!-- 6. FOOTER -->
-    <footer class="bg-slate-950 text-slate-600 text-xs py-12 border-t border-slate-900">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
-            <div class="flex items-center gap-3">
-                <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">LS</div>
-                <span class="text-slate-400 font-bold tracking-tight uppercase">Leasing Support © 2026</span>
-            </div>
-            <div class="flex gap-6 text-slate-500 font-medium">
-                <a href="#" class="hover:text-slate-300 transition-colors">Términos Legales</a>
-                <a href="#" class="hover:text-slate-300 transition-colors">Tratamiento de Datos (Habeas Data)</a>
-                <a href="#" class="hover:text-slate-300 transition-colors">Vigilado Superintendencia</a>
-            </div>
-        </div>
-    </footer>
+function setConfigValue(key, value) {
+  const sheet = getOrCreateSheet(SHEETS.CONFIG, ['key', 'value']);
+  const values = sheet.getDataRange().getValues();
+  let rowIndex = -1;
+  for (let i = 1; i < values.length; i++) {
+    if (values[i][0] === key) { rowIndex = i + 1; break; }
+  }
+  if (rowIndex > -1) sheet.getRange(rowIndex, 2).setValue(value);
+  else sheet.appendRow([key, value]);
+}
 
-    <!-- INTERACTIVE SCRIPT PARA EL SIMULADOR DE COUTAS (LÓGICA JAVASCRIPT) -->
-    <script>
-        const montoInput = document.getElementById('monto');
-        const montoLabel = document.getElementById('montoLabel');
-        const cuotaEstimada = document.getElementById('cuotaEstimada');
-        const radioInputs = document.querySelectorAll('input[name="plazo"]');
+/* ============================================================
+   LOGIN
+   ============================================================ */
 
-        function calcularLeasing() {
-            const monto = parseInt(montoInput.value);
-            let plazo = 60;
-            
-            radioInputs.forEach(input => {
-                if(input.checked) {
-                    plazo = parseInt(input.value);
-                }
-            });
+function handleLogin(body) {
+  const usuarios = getOrCreateSheet(SHEETS.USUARIOS, ['idUsuario', 'correo', 'fecha']);
+  getOrCreateSheet(SHEETS.ORGANIZACION, ['nombreEmpresa', 'nit', 'tamaño', 'sector', 'dofa', 'pestel']);
+  getOrCreateSheet(SHEETS.PRODUCTOS, ['nombre', 'stockInicial', 'precio']);
+  getOrCreateSheet(SHEETS.VENDEDORES, ['nombre', 'zona']);
+  getOrCreateSheet(SHEETS.VENTAS, ['fecha', 'producto', 'cantidad', 'monto', 'vendedor', 'ubicacion']);
+  getOrCreateSheet(SHEETS.OBJETIVOS, ['id', 'objetivo', 'descripcion', 'meta', 'actual']);
 
-            // Actualizar etiqueta del monto formateada a pesos colombianos (COP)
-            montoLabel.textContent = `$${monto.toLocaleString('es-CO')} COP`;
+  const existing = sheetToObjects(usuarios).find(u => u.idUsuario === body.idUsuario);
+  if (!existing) {
+    usuarios.appendRow([body.idUsuario, body.correo, new Date().toISOString()]);
+  }
 
-            // Algoritmo de aproximación comercial para leasing corporativo
-            let tasaInteresMensualFactor = 0.015; // Plazo 36 meses
-            if (plazo === 60) tasaInteresMensualFactor = 0.012;
-            if (plazo === 120) tasaInteresMensualFactor = 0.009;
+  const org = getOrganizacionObj();
+  const esNuevo = !org.nombreEmpresa;
 
-            const cuotaCalculada = Math.round((monto / plazo) + (monto * tasaInteresMensualFactor));
-            cuotaEstimada.textContent = `$${cuotaCalculada.toLocaleString('es-CO')} COP`;
-        }
+  return {
+    idUsuario: body.idUsuario,
+    organizacion: org,
+    esNuevo: esNuevo
+  };
+}
 
-        // Listeners de los controles
-        montoInput.addEventListener('input', calcularLeasing);
-        radioInputs.forEach(input => {
-            input.addEventListener('change', () => {
-                // Alternar clases visuales activas/inactivas en base al UX radio customizado
-                radioInputs.forEach(ri => {
-                    const parentLabel = ri.closest('label');
-                    if (ri.checked) {
-                        parentLabel.className = "border-2 border-blue-600 bg-blue-50/30 rounded-xl p-3 text-center cursor-pointer transition-all block";
-                    } else {
-                        parentLabel.className = "border border-slate-200 rounded-xl p-3 text-center cursor-pointer hover:border-blue-500 transition-all block";
-                    }
-                });
-                calcularLeasing();
-            });
-        });
+/* ============================================================
+   ORGANIZACIÓN (fila única)
+   ============================================================ */
 
-        // Inicialización en la primera carga
-        calcularLeasing();
-    </script>
-</body>
-</html>
+function getOrganizacionObj() {
+  const sheet = getOrCreateSheet(SHEETS.ORGANIZACION, ['nombreEmpresa', 'nit', 'tamaño', 'sector', 'dofa', 'pestel']);
+  const rows = sheetToObjects(sheet);
+  if (!rows.length) return {};
+  const r = rows[0];
+  return {
+    nombreEmpresa: r.nombreEmpresa || '',
+    nit: r.nit || '',
+    tamaño: r.tamaño || '',
+    sector: r.sector || '',
+    dofa: r.dofa ? JSON.parse(r.dofa) : { f: '', o: '', d: '', a: '' },
+    pestel: r.pestel ? JSON.parse(r.pestel) : { pe: '', ec: '', so: '', te: '', eco: '', le: '' }
+  };
+}
+
+function handleGuardarOrganizacion(body) {
+  const sheet = getOrCreateSheet(SHEETS.ORGANIZACION, ['nombreEmpresa', 'nit', 'tamaño', 'sector', 'dofa', 'pestel']);
+  const o = body.orgData;
+  const row = [
+    o.nombreEmpresa || '', o.nit || '', o.tamaño || '', o.sector || '',
+    JSON.stringify(o.dofa || {}), JSON.stringify(o.pestel || {})
+  ];
+  if (sheet.getLastRow() >= 2) {
+    sheet.getRange(2, 1, 1, row.length).setValues([row]);
+  } else {
+    sheet.appendRow(row);
+  }
+  return { nombreEmpresa: o.nombreEmpresa };
+}
+
+/* ============================================================
+   DASHBOARD — datos completos
+   ============================================================ */
+
+function handleObtenerDashboard(body) {
+  const productosSheet = getOrCreateSheet(SHEETS.PRODUCTOS, ['nombre', 'stockInicial', 'precio']);
+  const vendedoresSheet = getOrCreateSheet(SHEETS.VENDEDORES, ['nombre', 'zona']);
+  const ventasSheet = getOrCreateSheet(SHEETS.VENTAS, ['fecha', 'producto', 'cantidad', 'monto', 'vendedor', 'ubicacion']);
+  const objetivosSheet = getOrCreateSheet(SHEETS.OBJETIVOS, ['id', 'objetivo', 'descripcion', 'meta', 'actual']);
+
+  const ventas = sheetToObjects(ventasSheet);
+  const productos = sheetToObjects(productosSheet).map(p => {
+    const vendidos = ventas
+      .filter(v => v.producto === p.nombre)
+      .reduce((sum, v) => sum + Number(v.cantidad || 0), 0);
+    return { nombre: p.nombre, stockInicial: p.stockInicial, precio: p.precio, vendidos: vendidos };
+  });
+
+  return {
+    ventas: ventas.reverse(),
+    productos: productos,
+    vendedores: sheetToObjects(vendedoresSheet),
+    objetivos: sheetToObjects(objetivosSheet),
+    organizacion: getOrganizacionObj(),
+    mistralKey: getConfigValue('mistralKey')
+  };
+}
+
+/* ============================================================
+   PRODUCTOS / VENDEDORES / VENTAS
+   ============================================================ */
+
+function handleCrearProducto(body) {
+  const sheet = getOrCreateSheet(SHEETS.PRODUCTOS, ['nombre', 'stockInicial', 'precio']);
+  const p = body.producto;
+  sheet.appendRow([p.nombre, p.stockInicial, p.precio]);
+  return { added: true };
+}
+
+function handleCrearVendedor(body) {
+  const sheet = getOrCreateSheet(SHEETS.VENDEDORES, ['nombre', 'zona']);
+  const v = body.vendedor;
+  sheet.appendRow([v.nombre, v.zona]);
+  return { added: true };
+}
+
+function handleRegistrarVenta(body) {
+  const sheet = getOrCreateSheet(SHEETS.VENTAS, ['fecha', 'producto', 'cantidad', 'monto', 'vendedor', 'ubicacion']);
+  const v = body.venta;
+  sheet.appendRow([v.fecha, v.producto, v.cantidad, v.monto, v.vendedor, v.ubicacion]);
+  return { added: true };
+}
+
+/* ============================================================
+   OBJETIVOS (OKRs)
+   ============================================================ */
+
+function handleGuardarObjetivo(body) {
+  const sheet = getOrCreateSheet(SHEETS.OBJETIVOS, ['id', 'objetivo', 'descripcion', 'meta', 'actual']);
+  const o = body.objetivo;
+  const nuevoId = 'OKR-' + (sheet.getLastRow()); // fila 1 = encabezado, así el primer OKR es OKR-1
+  sheet.appendRow([nuevoId, o.objetivo, o.descripcion, o.meta, o.actual || 0]);
+  return { id: nuevoId };
+}
+
+function handleActualizarAvanceOKR(body) {
+  const sheet = getOrCreateSheet(SHEETS.OBJETIVOS, ['id', 'objetivo', 'descripcion', 'meta', 'actual']);
+  const values = sheet.getDataRange().getValues();
+  for (let i = 1; i < values.length; i++) {
+    if (values[i][0] === body.idObjetivo) {
+      sheet.getRange(i + 1, 5).setValue(body.nuevoActual); // columna "actual"
+      return { idObjetivo: body.idObjetivo, nuevoActual: body.nuevoActual };
+    }
+  }
+  return { updated: false, error: 'OKR no encontrado: ' + body.idObjetivo };
+}
+
+/* ============================================================
+   CONFIG (Mistral API Key)
+   ============================================================ */
+
+function handleGuardarConfig(body) {
+  setConfigValue('mistralKey', body.mistralKey || '');
+  return { saved: true };
+}
