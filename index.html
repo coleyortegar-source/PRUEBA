@@ -1,0 +1,270 @@
+/**
+ * DataPulse Suite Pro — Backend Apps Script
+ * Compatible con el frontend "Recrear (1).html" (DataPulse Suite Pro)
+ * Sumerce Alimentos S.A.S.
+ *
+ * ACCIONES SOPORTADAS (deben coincidir EXACTO con las que llama el HTML):
+ *   login, obtenerDatosDashboard, guardarOrganizacion, crearProducto,
+ *   crearVendedor, registrarVenta, guardarObjetivo, guardarConfig,
+ *   actualizarAvanceOKR
+ *
+ * INSTALACIÓN:
+ * 1. Abre tu Google Sheet (el mismo que ya tenías, o uno nuevo).
+ * 2. Extensiones > Apps Script.
+ * 3. Borra TODO el contenido de Code.gs y pega este archivo completo.
+ * 4. Guarda.
+ * 5. Implementar > Gestionar implementaciones > edita (lápiz) la
+ *    implementación existente > "Nueva versión" > Implementar.
+ *    (Si prefieres una URL nueva: Implementar > Nueva implementación
+ *    > Aplicación web > Ejecutar como "Yo" > Acceso "Cualquier usuario").
+ * 6. Copia la URL /exec y pégala en el campo "URL Google Apps Script"
+ *    del formulario de login de Recrear.html.
+ */
+
+const SHEETS = {
+  USUARIOS: 'Usuarios',
+  ORGANIZACION: 'Organizacion',
+  CONFIG: 'Config',
+  PRODUCTOS: 'Productos',
+  VENDEDORES: 'Vendedores',
+  VENTAS: 'Ventas',
+  OBJETIVOS: 'Objetivos'
+};
+
+/* ============================================================
+   ENTRY POINTS
+   ============================================================ */
+
+function doGet(e) {
+  return jsonOut({ success: true, data: { status: 'DataPulse Suite Pro backend activo' } });
+}
+
+function doPost(e) {
+  try {
+    const body = JSON.parse(e.postData.contents);
+    const action = body.action;
+
+    switch (action) {
+      case 'login':
+        return jsonOut({ success: true, data: handleLogin(body) });
+      case 'obtenerDatosDashboard':
+        return jsonOut({ success: true, data: handleObtenerDashboard(body) });
+      case 'guardarOrganizacion':
+        return jsonOut({ success: true, data: handleGuardarOrganizacion(body) });
+      case 'crearProducto':
+        return jsonOut({ success: true, data: handleCrearProducto(body) });
+      case 'crearVendedor':
+        return jsonOut({ success: true, data: handleCrearVendedor(body) });
+      case 'registrarVenta':
+        return jsonOut({ success: true, data: handleRegistrarVenta(body) });
+      case 'guardarObjetivo':
+        return jsonOut({ success: true, data: handleGuardarObjetivo(body) });
+      case 'guardarConfig':
+        return jsonOut({ success: true, data: handleGuardarConfig(body) });
+      case 'actualizarAvanceOKR':
+        return jsonOut({ success: true, data: handleActualizarAvanceOKR(body) });
+      default:
+        return jsonOut({ success: false, error: 'Acción no reconocida: ' + action });
+    }
+  } catch (err) {
+    return jsonOut({ success: false, error: err.message });
+  }
+}
+
+function jsonOut(obj) {
+  return ContentService.createTextOutput(JSON.stringify(obj))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+/* ============================================================
+   HELPERS DE HOJAS
+   ============================================================ */
+
+function getSS() { return SpreadsheetApp.getActiveSpreadsheet(); }
+
+function getOrCreateSheet(name, headers) {
+  const ss = getSS();
+  let sheet = ss.getSheetByName(name);
+  if (!sheet) {
+    sheet = ss.insertSheet(name);
+    sheet.appendRow(headers);
+    sheet.setFrozenRows(1);
+  }
+  return sheet;
+}
+
+function sheetToObjects(sheet) {
+  const values = sheet.getDataRange().getValues();
+  if (values.length < 2) return [];
+  const headers = values[0];
+  return values.slice(1).map(row => {
+    const obj = {};
+    headers.forEach((h, i) => obj[h] = row[i]);
+    return obj;
+  });
+}
+
+function getConfigValue(key) {
+  const sheet = getOrCreateSheet(SHEETS.CONFIG, ['key', 'value']);
+  const rows = sheetToObjects(sheet);
+  const row = rows.find(r => r.key === key);
+  return row ? row.value : '';
+}
+
+function setConfigValue(key, value) {
+  const sheet = getOrCreateSheet(SHEETS.CONFIG, ['key', 'value']);
+  const values = sheet.getDataRange().getValues();
+  let rowIndex = -1;
+  for (let i = 1; i < values.length; i++) {
+    if (values[i][0] === key) { rowIndex = i + 1; break; }
+  }
+  if (rowIndex > -1) sheet.getRange(rowIndex, 2).setValue(value);
+  else sheet.appendRow([key, value]);
+}
+
+/* ============================================================
+   LOGIN
+   ============================================================ */
+
+function handleLogin(body) {
+  const usuarios = getOrCreateSheet(SHEETS.USUARIOS, ['idUsuario', 'correo', 'fecha']);
+  getOrCreateSheet(SHEETS.ORGANIZACION, ['nombreEmpresa', 'nit', 'tamaño', 'sector', 'dofa', 'pestel']);
+  getOrCreateSheet(SHEETS.PRODUCTOS, ['nombre', 'stockInicial', 'precio']);
+  getOrCreateSheet(SHEETS.VENDEDORES, ['nombre', 'zona']);
+  getOrCreateSheet(SHEETS.VENTAS, ['fecha', 'producto', 'cantidad', 'monto', 'vendedor', 'ubicacion']);
+  getOrCreateSheet(SHEETS.OBJETIVOS, ['id', 'objetivo', 'descripcion', 'meta', 'actual']);
+
+  const existing = sheetToObjects(usuarios).find(u => u.idUsuario === body.idUsuario);
+  if (!existing) {
+    usuarios.appendRow([body.idUsuario, body.correo, new Date().toISOString()]);
+  }
+
+  const org = getOrganizacionObj();
+  const esNuevo = !org.nombreEmpresa;
+
+  return {
+    idUsuario: body.idUsuario,
+    organizacion: org,
+    esNuevo: esNuevo
+  };
+}
+
+/* ============================================================
+   ORGANIZACIÓN (fila única)
+   ============================================================ */
+
+function getOrganizacionObj() {
+  const sheet = getOrCreateSheet(SHEETS.ORGANIZACION, ['nombreEmpresa', 'nit', 'tamaño', 'sector', 'dofa', 'pestel']);
+  const rows = sheetToObjects(sheet);
+  if (!rows.length) return {};
+  const r = rows[0];
+  return {
+    nombreEmpresa: r.nombreEmpresa || '',
+    nit: r.nit || '',
+    tamaño: r.tamaño || '',
+    sector: r.sector || '',
+    dofa: r.dofa ? JSON.parse(r.dofa) : { f: '', o: '', d: '', a: '' },
+    pestel: r.pestel ? JSON.parse(r.pestel) : { pe: '', ec: '', so: '', te: '', eco: '', le: '' }
+  };
+}
+
+function handleGuardarOrganizacion(body) {
+  const sheet = getOrCreateSheet(SHEETS.ORGANIZACION, ['nombreEmpresa', 'nit', 'tamaño', 'sector', 'dofa', 'pestel']);
+  const o = body.orgData;
+  const row = [
+    o.nombreEmpresa || '', o.nit || '', o.tamaño || '', o.sector || '',
+    JSON.stringify(o.dofa || {}), JSON.stringify(o.pestel || {})
+  ];
+  if (sheet.getLastRow() >= 2) {
+    sheet.getRange(2, 1, 1, row.length).setValues([row]);
+  } else {
+    sheet.appendRow(row);
+  }
+  return { nombreEmpresa: o.nombreEmpresa };
+}
+
+/* ============================================================
+   DASHBOARD — datos completos
+   ============================================================ */
+
+function handleObtenerDashboard(body) {
+  const productosSheet = getOrCreateSheet(SHEETS.PRODUCTOS, ['nombre', 'stockInicial', 'precio']);
+  const vendedoresSheet = getOrCreateSheet(SHEETS.VENDEDORES, ['nombre', 'zona']);
+  const ventasSheet = getOrCreateSheet(SHEETS.VENTAS, ['fecha', 'producto', 'cantidad', 'monto', 'vendedor', 'ubicacion']);
+  const objetivosSheet = getOrCreateSheet(SHEETS.OBJETIVOS, ['id', 'objetivo', 'descripcion', 'meta', 'actual']);
+
+  const ventas = sheetToObjects(ventasSheet);
+  const productos = sheetToObjects(productosSheet).map(p => {
+    const vendidos = ventas
+      .filter(v => v.producto === p.nombre)
+      .reduce((sum, v) => sum + Number(v.cantidad || 0), 0);
+    return { nombre: p.nombre, stockInicial: p.stockInicial, precio: p.precio, vendidos: vendidos };
+  });
+
+  return {
+    ventas: ventas.reverse(),
+    productos: productos,
+    vendedores: sheetToObjects(vendedoresSheet),
+    objetivos: sheetToObjects(objetivosSheet),
+    organizacion: getOrganizacionObj(),
+    mistralKey: getConfigValue('mistralKey')
+  };
+}
+
+/* ============================================================
+   PRODUCTOS / VENDEDORES / VENTAS
+   ============================================================ */
+
+function handleCrearProducto(body) {
+  const sheet = getOrCreateSheet(SHEETS.PRODUCTOS, ['nombre', 'stockInicial', 'precio']);
+  const p = body.producto;
+  sheet.appendRow([p.nombre, p.stockInicial, p.precio]);
+  return { added: true };
+}
+
+function handleCrearVendedor(body) {
+  const sheet = getOrCreateSheet(SHEETS.VENDEDORES, ['nombre', 'zona']);
+  const v = body.vendedor;
+  sheet.appendRow([v.nombre, v.zona]);
+  return { added: true };
+}
+
+function handleRegistrarVenta(body) {
+  const sheet = getOrCreateSheet(SHEETS.VENTAS, ['fecha', 'producto', 'cantidad', 'monto', 'vendedor', 'ubicacion']);
+  const v = body.venta;
+  sheet.appendRow([v.fecha, v.producto, v.cantidad, v.monto, v.vendedor, v.ubicacion]);
+  return { added: true };
+}
+
+/* ============================================================
+   OBJETIVOS (OKRs)
+   ============================================================ */
+
+function handleGuardarObjetivo(body) {
+  const sheet = getOrCreateSheet(SHEETS.OBJETIVOS, ['id', 'objetivo', 'descripcion', 'meta', 'actual']);
+  const o = body.objetivo;
+  const nuevoId = 'OKR-' + (sheet.getLastRow()); // fila 1 = encabezado, así el primer OKR es OKR-1
+  sheet.appendRow([nuevoId, o.objetivo, o.descripcion, o.meta, o.actual || 0]);
+  return { id: nuevoId };
+}
+
+function handleActualizarAvanceOKR(body) {
+  const sheet = getOrCreateSheet(SHEETS.OBJETIVOS, ['id', 'objetivo', 'descripcion', 'meta', 'actual']);
+  const values = sheet.getDataRange().getValues();
+  for (let i = 1; i < values.length; i++) {
+    if (values[i][0] === body.idObjetivo) {
+      sheet.getRange(i + 1, 5).setValue(body.nuevoActual); // columna "actual"
+      return { idObjetivo: body.idObjetivo, nuevoActual: body.nuevoActual };
+    }
+  }
+  return { updated: false, error: 'OKR no encontrado: ' + body.idObjetivo };
+}
+
+/* ============================================================
+   CONFIG (Mistral API Key)
+   ============================================================ */
+
+function handleGuardarConfig(body) {
+  setConfigValue('mistralKey', body.mistralKey || '');
+  return { saved: true };
+}
